@@ -2,16 +2,25 @@ package com.example.storemanagement.Fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton$InspectionCompanion;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.storemanagement.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +37,7 @@ public class Fragment_logIn extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private FirebaseAuth mAuth;
 
     public Fragment_logIn() {
         // Required empty public constructor
@@ -58,6 +68,8 @@ public class Fragment_logIn extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
@@ -71,7 +83,12 @@ public class Fragment_logIn extends Fragment {
         buttonLogIn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Navigation.findNavController(view).navigate(R.id.action_fragment_logIn_to_fragmentStore);
+                TextView emailAddressLogin = view.findViewById(R.id.editTextTextEmailAddressLogIn);
+                TextView passwordLogin = view.findViewById(R.id.editTextTextPasswordLogIn);
+                String emailStr = emailAddressLogin.getText().toString();
+                String passwordStr = passwordLogin.getText().toString();
+
+                login(view,emailStr,passwordStr);
             }
         });
 
@@ -85,5 +102,22 @@ public class Fragment_logIn extends Fragment {
         });
 
         return view;
+    }
+
+    public void login(View view,String email, String password){
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Navigation.findNavController(view).navigate(R.id.action_fragment_logIn_to_fragmentStore);
+
+                        } else {
+                            Toast.makeText(getContext(), "can't connect check if you filled correctly the info ", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
     }
 }
