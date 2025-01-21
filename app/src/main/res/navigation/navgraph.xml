@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navgraph"
+    app:startDestination="@id/fragment_logIn">
+
+    <fragment
+        android:id="@+id/fragment_logIn"
+        android:name="com.example.storemanagement.Fragments.Fragment_logIn"
+        android:label="fragment_log_in"
+        tools:layout="@layout/fragment_log_in" >
+        <action
+            android:id="@+id/action_fragment_logIn_to_fragment_reg"
+            app:destination="@id/fragment_reg" />
+        <action
+            android:id="@+id/action_fragment_logIn_to_fragmentStore"
+            app:destination="@id/fragmentStore" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_reg"
+        android:name="com.example.storemanagement.Fragments.Fragment_reg"
+        android:label="fragment_reg"
+        tools:layout="@layout/fragment_reg" >
+        <action
+            android:id="@+id/action_fragment_reg_to_fragment_logIn"
+            app:destination="@id/fragment_logIn" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentStore"
+        android:name="com.example.storemanagement.Fragments.FragmentStore"
+        android:label="fragment_store"
+        tools:layout="@layout/fragment_store" />
+</navigation>
