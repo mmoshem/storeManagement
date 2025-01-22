@@ -82,13 +82,18 @@ public class Fragment_logIn extends Fragment {
 
         buttonLogIn.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view){
+            public void onClick(View v){
                 TextView emailAddressLogin = view.findViewById(R.id.editTextTextEmailAddressLogIn);
                 TextView passwordLogin = view.findViewById(R.id.editTextTextPasswordLogIn);
                 String emailStr = emailAddressLogin.getText().toString();
                 String passwordStr = passwordLogin.getText().toString();
 
-                login(view,emailStr,passwordStr);
+                if(!emailStr.isBlank()&&!passwordStr.isBlank()) {
+                    login(emailStr, passwordStr);
+                }
+                else{
+                    Toast.makeText(getContext(),"Must fill password and email",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -104,18 +109,21 @@ public class Fragment_logIn extends Fragment {
         return view;
     }
 
-    public void login(View view,String email, String password){
-
+    public void login(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Navigation.findNavController(view).navigate(R.id.action_fragment_logIn_to_fragmentStore);
-
-                        } else {
-                            Toast.makeText(getContext(), "can't connect check if you filled correctly the info ", Toast.LENGTH_SHORT).show();
-
+                            if (getView() != null) {
+                                Toast.makeText(getContext(),"login success",Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(getView()).navigate(R.id.action_fragment_logIn_to_fragmentStore);
+                            } else {
+                                Toast.makeText(getContext(), "Navigation failed. Please try again.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else {
+                            Toast.makeText(getContext(), "can't connect check if you filled correctly the info ", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
