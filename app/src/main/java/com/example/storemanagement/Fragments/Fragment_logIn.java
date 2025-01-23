@@ -83,10 +83,10 @@ public class Fragment_logIn extends Fragment {
         buttonLogIn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                TextView emailAddressLogin = view.findViewById(R.id.editTextTextEmailAddressLogIn);
-                TextView passwordLogin = view.findViewById(R.id.editTextTextPasswordLogIn);
-                String emailStr = emailAddressLogin.getText().toString();
-                String passwordStr = passwordLogin.getText().toString();
+                String emailStr = ((TextView)view.findViewById(R.id.editTextTextEmailAddressLogIn)).getText().toString();//can do it this way
+                TextView passwordLogin = view.findViewById(R.id.editTextTextPasswordLogIn);// or can separate in two **
+//                String emailStr = emailAddressLogin.getText().toString();
+                String passwordStr = passwordLogin.getText().toString();// ** the second part
 
                 if(!emailStr.isBlank()&&!passwordStr.isBlank()) {
                     login(emailStr, passwordStr);
