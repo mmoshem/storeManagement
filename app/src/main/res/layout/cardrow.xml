@@ -8,6 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:background="#77C58F"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp"
@@ -84,14 +85,18 @@
             <Button
                 android:id="@+id/btAdd"
                 android:layout_width="50dp"
+                android:background="@drawable/designbutton"
                 android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
                 android:layout_weight="1"
                 android:text="+">
             </Button>
 
             <Button
                 android:id="@+id/btRemove"
+                android:background="@drawable/designbutton"
                 android:layout_width="50dp"
+                android:layout_marginTop="5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="-">
