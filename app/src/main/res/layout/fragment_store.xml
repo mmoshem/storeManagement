@@ -17,7 +17,15 @@
         android:textSize="33dp"
         android:text="the store " />
 
+    <EditText
+        android:id="@+id/searchEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search..."
+        android:inputType="text" />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/resView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
