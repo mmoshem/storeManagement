@@ -81,8 +81,9 @@ public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHo
     @Override
     public int getItemCount() {
         return filterdDataset.size(); // Return the size of the filtered dataset
+    }
 
-    }public void filterDataset(String query) {
+    public void filterDataset(String query) {
         filterdDataset.clear(); // Clear the current filtered dataset
 
         if (query.isEmpty()) {
