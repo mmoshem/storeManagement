@@ -20,10 +20,6 @@ import java.util.ArrayList;
 
 public class FragmentStore extends Fragment {
 
-    private ArrayList<ProductModel> dataSet;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
-
     public FragmentStore() {
         // Required empty public constructor
     }
@@ -34,19 +30,19 @@ public class FragmentStore extends Fragment {
         View view = inflater.inflate(R.layout.fragment_store, container, false);
 
         // Initialize RecyclerView and other elements
-        recyclerView = view.findViewById(R.id.resView);
-        layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView recyclerView = view.findViewById(R.id.resView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         // Populate the dataset for RecyclerView
-        dataSet = new ArrayList<>();
+        ArrayList<ProductModel> dataSet = new ArrayList<>();
         for (int i = 0; i < StoreData.ProductArray.length; i++) {
             dataSet.add(new ProductModel(
                     StoreData.drawableArray[i],
                     StoreData.ProductArray[i],
-                    StoreData.price[i],
+                    StoreData.priceArray[i],
                     0,
-                    StoreData.id_[i]
+                    StoreData.id_Array[i]
             ));
         }
 

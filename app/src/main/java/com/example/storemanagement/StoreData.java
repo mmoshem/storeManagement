@@ -9,7 +9,7 @@ public class StoreData {
     };
 
 
-    public static String[] price = {
+    public static String[] priceArray = {
             "₪1.25", "₪0.99", "₪0.50", "₪1.75", "₪1.20", "₪2.00", "₪1.50",
             "₪1.80", "₪2.25", "₪2.50", "₪2.10", "₪1.30", "₪1.60", "₪1.10",
             "₪2.35", "₪0.90", "₪1.40", "₪1.70", "₪1.85", "₪0.95", "₪1.10",
@@ -25,6 +25,6 @@ public class StoreData {
             R.drawable.okra, R.drawable.peas, R.drawable.pumpkin,R.drawable.sweet_potato,R.drawable.mushroom
     };
 
-    public static Integer[] id_ = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+    public static Integer[] id_Array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, 20, 21, 22, 23, 24, 25, 26, 27};
 }
