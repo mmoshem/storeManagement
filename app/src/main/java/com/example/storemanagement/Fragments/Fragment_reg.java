@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.storemanagement.ProductModel;
 import com.example.storemanagement.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,8 +91,9 @@ public class Fragment_reg extends Fragment {
                 EditText editTextPhoneNum = view.findViewById(R.id.editTextPhoneReg);
                 EditText editTextPassword = view.findViewById(R.id.editTextTextPasswordReg);
                 EditText editTextRePassword = view.findViewById(R.id.editTextTextPasswordReEnterReg);
+                EditText editTextName = view.findViewById(R.id.editTextTextUserName);
 
-                if(isInfoGoodToReg(editTextEmailBox,editTextPhoneNum,editTextPassword,editTextRePassword)){
+                if(isInfoGoodToReg(editTextEmailBox,editTextPhoneNum,editTextPassword,editTextRePassword,editTextName)){
                     String passwordStr = editTextPassword.getText().toString();
                     String emailStr = editTextEmailBox.getText().toString();
                     registerToFireBase(view ,emailStr, passwordStr);
@@ -97,18 +105,25 @@ public class Fragment_reg extends Fragment {
 
         return view;
     }
-    public boolean isInfoGoodToReg(EditText emailView, EditText phoneNumView, EditText PasswordView, EditText RePasswordView){
+    public boolean isInfoGoodToReg(EditText emailView, EditText phoneNumView, EditText PasswordView, EditText RePasswordView,EditText name){
         String emailStr = emailView.getText().toString();
         String phoneNumString = phoneNumView.getText().toString();
         String passwordStr = PasswordView.getText().toString();
         String rePasswordString = RePasswordView.getText().toString();
+        String namestring = name.getText().toString();
+
 
 
         if(!emailStr.isBlank()&&!passwordStr.isBlank()&&
-                !phoneNumString.isBlank()&&!rePasswordString.isBlank()){
+                !phoneNumString.isBlank()&&!rePasswordString.isBlank()&&!namestring.isBlank()){
             if(passwordStr.equals(rePasswordString)) {
                 if(passwordStr.length()>=6) {
-                    return true;
+                    if(namestring.length()<10) {
+                        return true;
+                    }
+                    else{
+                        Toast.makeText(getContext(), "name should be shorter than 10 chars", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
                     Toast.makeText(getContext(), "password should be longer than 5", Toast.LENGTH_SHORT).show();
@@ -132,7 +147,12 @@ public class Fragment_reg extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            String nameString = ((EditText) view.findViewById(R.id.editTextTextUserName)).getText().toString();
+                            String phoneNumString = ((EditText)view.findViewById(R.id.editTextPhoneReg)).getText().toString();
+
+                            addData(nameString,email,phoneNumString);
                             Toast.makeText(getContext(), "registration successful", Toast.LENGTH_SHORT).show();
+
                             Navigation.findNavController(view).navigate(R.id.action_fragment_reg_to_fragment_logIn);
 
                         } else {
@@ -141,6 +161,67 @@ public class Fragment_reg extends Fragment {
                     }
                 });
     }
+//    public void addData(String name, String email, String phone) {
+//        // Get the current user ID from FirebaseAuth
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if (user == null) {
+//            Log.w("Firebase", "User is not authenticated. Cannot add data.");
+//            return;
+//        }
+//
+//        String userId = user.getUid();
+//        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+//
+//        // Add name
+//        userRef.child("name").setValue(name)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("Firebase", "User name added successfully");
+//                        } else {
+//                            Log.w("Firebase", "Failed to add user name", task.getException());
+//                        }
+//                    }
+//                });
+//
+//        // Add email
+//        userRef.child("email").setValue(email)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("Firebase", "User email added successfully");
+//                        } else {
+//                            Log.w("Firebase", "Failed to add user email", task.getException());
+//                        }
+//                    }
+//                });
+//
+//        // Add phone
+//        userRef.child("phone").setValue(phone)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("Firebase", "User phone added successfully");
+//                        } else {
+//                            Log.w("Firebase", "Failed to add user phone", task.getException());
+//                        }
+//                    }
+//                });
+//    }
 
 
+
+
+    public void addData(String name,String Email,String phone) {
+        // Write a message to the database
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+        userRef.child("Email").setValue(Email);
+        userRef.child("phone").setValue(phone);
+        userRef.child("name").setValue(name);
+    }
 }

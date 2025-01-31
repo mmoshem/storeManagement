@@ -14,8 +14,8 @@
             android:id="@+id/action_fragment_logIn_to_fragment_reg"
             app:destination="@id/fragment_reg" />
         <action
-            android:id="@+id/action_fragment_logIn_to_fragmentStore"
-            app:destination="@id/fragmentStore" />
+            android:id="@+id/action_fragment_logIn_to_fragmentadapter"
+            app:destination="@id/fragmentadapter" />
     </fragment>
     <fragment
         android:id="@+id/fragment_reg"
@@ -27,8 +27,8 @@
             app:destination="@id/fragment_logIn" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentStore"
-        android:name="com.example.storemanagement.Fragments.FragmentStore"
-        android:label="fragment_store"
-        tools:layout="@layout/fragment_store" />
+        android:id="@+id/fragmentadapter"
+        android:name="com.example.storemanagement.Fragments.fragmentadapter"
+        android:label="fragment_fragmentadapter"
+        tools:layout="@layout/fragment_fragmentadapter" />
 </navigation>

@@ -11,6 +11,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHolder>  {
@@ -66,6 +71,7 @@ public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHo
             product.setM_countItem(count);
             holder.itemCount.setText(String.valueOf(count));
             notifyItemChanged(position);
+//            updateCart(product);
         });
 
         holder.btRemove.setOnClickListener(v -> {
@@ -78,6 +84,18 @@ public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHo
         });
     }
 
+//    public void updateCart(ProductModel p){
+//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        if (currentUser != null) {
+//            String userEmail = currentUser.getEmail(); // Retrieve the email
+//
+//            FirebaseDatabase database = FirebaseDatabase.getInstance();
+//            DatabaseReference myRef = database.getReference("userEmail").child(userEmail);
+//            UserCartData usercartdata = new UserCartData(p, userEmail);
+//            myRef.setValue(usercartdata);
+//        }
+//    }
     @Override
     public int getItemCount() {
         return filterdDataset.size(); // Return the size of the filtered dataset
