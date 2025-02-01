@@ -13,11 +13,11 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonCart"
 
             android:layout_width="74dp"
             android:layout_height="79dp"
-            android:text="move to cart "
+            android:text="Add and move to cart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -25,17 +25,17 @@
 
         <TextView
             android:id="@+id/textViewname"
-            android:layout_width="231dp"
-            android:layout_height="0dp"
+            android:layout_width="250dp"
+            android:layout_height="78dp"
             android:layout_gravity="center"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="88dp"
             android:padding="20dp"
-            android:text="test"
+            android:text=""
             android:textSize="33dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/buttonCart"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

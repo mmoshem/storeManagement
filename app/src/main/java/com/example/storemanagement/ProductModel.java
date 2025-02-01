@@ -7,6 +7,7 @@ public class ProductModel {
     private int m_countItem;
     private int m_id;
 
+    public ProductModel(){}
     public int getM_image() {
         return m_image;
     }

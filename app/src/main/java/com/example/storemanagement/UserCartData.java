@@ -1,28 +1,30 @@
 package com.example.storemanagement;
 
-public class UserCartData {
-    ProductModel productModel;
-    String userEmail;
+import java.util.ArrayList;
+import java.util.List;
 
-    public ProductModel getProductModel() {
+public class UserCartData {
+    ArrayList<ProductModel> productModel;
+//    String userEmail;
+
+    public ArrayList<ProductModel> getProductModel() {
         return productModel;
     }
 
-    public void setProductModel(ProductModel productModel) {
+    public void setProductModel(ArrayList<ProductModel> productModel) {
         this.productModel = productModel;
     }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
+//    public String getUserEmail() {
+//        return userEmail;
+//    }
+//
+//    public void setUserEmail(String userEmail) {
+//        this.userEmail = userEmail;
+//    }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public UserCartData(ProductModel productModel, String userEmail) {
+    public UserCartData(ArrayList<ProductModel> productModel) {
         this.productModel = productModel;
-        this.userEmail = userEmail;
     }
 
     public UserCartData(){

@@ -117,7 +117,7 @@ public class Fragment_logIn extends Fragment {
                         if (task.isSuccessful()) {
                             if (getView() != null) {
                                 Toast.makeText(getContext(),"login success",Toast.LENGTH_SHORT).show();
-                                Navigation.findNavController(getView()).navigate(R.id.action_fragment_logIn_to_fragmentStore);
+                                Navigation.findNavController(getView()).navigate(R.id.action_fragment_logIn_to_fragmentadapter);
                             } else {
                                 Toast.makeText(getContext(), "Navigation failed. Please try again.", Toast.LENGTH_SHORT).show();
                             }
