@@ -83,7 +83,7 @@ public class FragmentStore extends Fragment {
 
         // Handle "Add and Move to Cart" button click
         Button bt = view.findViewById(R.id.buttonCart);
-        bt.setText("Add and Move to Cart");
+//        bt.setText("Add and Move to Cart");
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

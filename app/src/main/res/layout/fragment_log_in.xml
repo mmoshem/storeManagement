@@ -1,54 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/lightBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.Fragment_logIn">
 
-    <EditText
-        android:id="@+id/editTextTextEmailAddressLogIn"
-        android:layout_width="wrap_content"
+    <!-- A CardView container for a neat login form -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewLogin"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="184dp"
-        android:ems="10"
-        android:hint="Enter email:"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        android:layout_margin="32dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <EditText
-        android:id="@+id/editTextTextPasswordLogIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:ems="10"
-        android:hint="Enter password:"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddressLogIn" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    <Button
-        android:id="@+id/buttonLogIn"
-        android:layout_width="166dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="96dp"
-        android:text="Log in"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordLogIn" />
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvLoginTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Welcome Back!"
+                android:textSize="24sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="24dp" />
 
-    <Button
-        android:id="@+id/buttonReg"
-        android:layout_width="166dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="24dp"
-        android:text="New user registration"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogIn" />
+            <!-- Email EditText -->
+            <EditText
+                android:id="@+id/editTextTextEmailAddressLogIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter email"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:textColorHint="@color/hintColor"
+
+                android:background="@drawable/edittext_background"
+                android:textColor="#333333"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Password EditText -->
+            <EditText
+                android:id="@+id/editTextTextPasswordLogIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background"
+                android:textColorHint="@color/hintColor"
+
+                android:textColor="#333333"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Log In Button -->
+            <Button
+                android:id="@+id/buttonLogIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Log in"
+                android:textStyle="bold"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Registration Button -->
+            <Button
+                android:id="@+id/buttonReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New user registration"
+                android:textStyle="bold"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

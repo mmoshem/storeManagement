@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="rowcolor">#DD3A9D4C</color>
+    <!-- Standard Colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Accent for rows, e.g., in lists -->
+    <color name="rowcolor">#11C169</color> <!-- Pale yellow -->
+
+    <!-- Primary color scheme -->
+    <color name="colorPrimary">#4A90E2</color>         <!-- A modern blue -->
+    <color name="colorPrimaryVariant">#1565C0</color>  <!-- A deeper blue variant -->
+    <color name="colorAccent">#0F9E91</color>          <!-- A vibrant pink accent -->
+
+    <!-- Background and text colors -->
+    <color name="lightBackground">#F5F5F5</color>
+    <color name="textColorPrimary">#333333</color>
+    <color name="hintColor">#757575</color>             <!-- A readable medium gray -->
+    <color name="editTextBorder">#CCCCCC</color>
+
+    <!-- Background for specific layouts (e.g., store screen) -->
+    <color name="LinearLayout">#AAE7EF</color>          <!-- A light cyan for a fresh look -->
 </resources>

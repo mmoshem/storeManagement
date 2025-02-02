@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- A vertical LinearLayout that shows the search bar, the cart items, a summary, and the clear button -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- A vertical layout with a search bar, a RecyclerView for cart items, a total price summary, and a clear button -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/LinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Fragments.cartFragment">
 
-    <!-- Optional search bar for cart items -->
+    <!-- Search Bar -->
     <EditText
         android:id="@+id/searchEditText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search..." />
+        android:hint="Search in cart..."
+        android:textColorHint="@color/hintColor"
+        android:textColor="@color/black"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background"
+        android:layout_margin="16dp" />
 
     <!-- RecyclerView for cart items -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="8dp" />
 
-    <!-- Summary TextView showing total price -->
+    <!-- Total Price Summary -->
     <TextView
         android:id="@+id/tv_total_items"
         android:layout_width="match_parent"
@@ -29,6 +37,8 @@
         android:padding="16dp"
         android:text="Total Price: ₪0.00"
         android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
         android:gravity="center" />
 
     <!-- Clear Cart Button -->
@@ -37,7 +47,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Clear Cart"
-        android:layout_margin="16dp"
-        android:background="@drawable/designbutton" />
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_margin="16dp" />
 
 </LinearLayout>

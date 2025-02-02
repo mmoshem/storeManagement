@@ -1,84 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/lightBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Fragment_reg" >
+    tools:context=".Fragments.Fragment_reg">
 
-    <EditText
-        android:id="@+id/editTextTextEmailAddressReg"
-        android:layout_width="359dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="68dp"
-        android:ems="10"
-        android:hint="Enter Email:"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <EditText
-        android:id="@+id/editTextTextUserName"
-        android:layout_width="359dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="40dp"
-        android:ems="10"
-        android:hint="Enter Name:"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddressReg" />
-
-    <EditText
-        android:id="@+id/editTextPhoneReg"
-        android:layout_width="359dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="40dp"
-        android:hint="Enter Phone:"
-        android:ems="10"
-        android:inputType="phone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextUserName" />
-
-    <EditText
-        android:id="@+id/editTextTextPasswordReg"
-        android:layout_width="359dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="40dp"
-        android:ems="10"
-        android:hint="Enter Password:"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPhoneReg" />
-
-    <EditText
-        android:id="@+id/editTextTextPasswordReEnterReg"
-        android:layout_width="359dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="40dp"
-        android:ems="10"
-        android:hint="Re-Enter Password:"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordReg" />
-
-    <Button
-        android:id="@+id/buttonAuthenticateAndRegister"
-        android:layout_width="192dp"
+    <!-- Container CardView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewReg"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="192dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="32dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordReEnterReg" />
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvRegTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Account"
+                android:textSize="24sp"
+                android:textColorHint="@color/hintColor"
+
+                android:textColor="#333333"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Email -->
+            <EditText
+                android:id="@+id/editTextTextEmailAddressReg"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Enter Email"
+                android:textColorHint="@color/hintColor"
+
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background"
+                android:textColor="#333333"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Username -->
+            <EditText
+                android:id="@+id/editTextTextUserName"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Enter Name"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                android:textColorHint="@color/hintColor"
+
+                android:background="@drawable/edittext_background"
+                android:textColor="#333333"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Phone -->
+            <EditText
+                android:id="@+id/editTextPhoneReg"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Enter Phone"
+                android:textColorHint="@color/hintColor"
+
+                android:inputType="phone"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background"
+                android:textColor="#333333"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Password -->
+            <EditText
+                android:id="@+id/editTextTextPasswordReg"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Enter Password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textColorHint="@color/hintColor"
+
+                android:background="@drawable/edittext_background"
+                android:textColor="#333333"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Re-enter Password -->
+            <EditText
+                android:id="@+id/editTextTextPasswordReEnterReg"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:hint="Re-Enter Password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background"
+                android:textColor="#333333"
+                android:textColorHint="@color/hintColor"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Register Button -->
+            <Button
+                android:id="@+id/buttonAuthenticateAndRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:textStyle="bold"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
