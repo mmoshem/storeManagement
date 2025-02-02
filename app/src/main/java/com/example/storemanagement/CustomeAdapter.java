@@ -6,11 +6,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.storemanagement.ProductModel;
+import com.example.storemanagement.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -18,15 +19,23 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHolder>  {
-
+public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHolder> {
 
     private ArrayList<ProductModel> dataSet;
     private ArrayList<ProductModel> filterdDataset;
+    // Flag to indicate if adapter is being used in the cart screen.
+    private boolean isCart;
 
-    public CustomeAdapter(ArrayList<ProductModel> dataSet) {
+    // Constructor with isCart flag
+    public CustomeAdapter(ArrayList<ProductModel> dataSet, boolean isCart) {
         this.dataSet = dataSet;
         this.filterdDataset = new ArrayList<>(dataSet);
+        this.isCart = isCart;
+    }
+
+    // If you wish to use the adapter in store mode only, you can still call:
+    public CustomeAdapter(ArrayList<ProductModel> dataSet) {
+        this(dataSet, false);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -44,8 +53,8 @@ public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHo
             pricePerPiece = itemView.findViewById(R.id.tv_price_per_piece);
             itemCount = itemView.findViewById(R.id.tv_item_count);
             imageView = itemView.findViewById(R.id.img_product);
-            btAdd =  itemView.findViewById(R.id.btAdd);
-            btRemove =  itemView.findViewById(R.id.btRemove);
+            btAdd = itemView.findViewById(R.id.btAdd);
+            btRemove = itemView.findViewById(R.id.btRemove);
         }
     }
 
@@ -53,13 +62,12 @@ public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHo
     @Override
     public CustomeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardrow, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
-
-        return myViewHolder;
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        // Work on the filtered dataset
         ProductModel product = filterdDataset.get(position);
         holder.productName.setText(product.getM_name());
         holder.pricePerPiece.setText(product.getM_price());
@@ -71,50 +79,62 @@ public class CustomeAdapter extends RecyclerView.Adapter<CustomeAdapter.MyViewHo
             product.setM_countItem(count);
             holder.itemCount.setText(String.valueOf(count));
             notifyItemChanged(position);
-//            updateCart(product);
+            // In cart mode, update Firebase immediately.
+            if (isCart) {
+                updateCartInFirebase(product);
+            }
         });
 
         holder.btRemove.setOnClickListener(v -> {
             int count = product.getM_countItem();
             if (count > 0) {
                 product.setM_countItem(count - 1);
-                holder.itemCount.setText(String.valueOf(count - 1));
+                holder.itemCount.setText(String.valueOf(product.getM_countItem()));
                 notifyItemChanged(position);
+                if (isCart) {
+                    updateCartInFirebase(product);
+                }
             }
         });
     }
 
-//    public void updateCart(ProductModel p){
-//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        if (currentUser != null) {
-//            String userEmail = currentUser.getEmail(); // Retrieve the email
-//
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            DatabaseReference myRef = database.getReference("userEmail").child(userEmail);
-//            UserCartData usercartdata = new UserCartData(p, userEmail);
-//            myRef.setValue(usercartdata);
-//        }
-//    }
+    // Push the updated product to Firebase under the user's cart node.
+    private void updateCartInFirebase(ProductModel product) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String userId = user.getUid();
+            DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(userId)
+                    .child("cart");
+
+            if (product.getM_countItem() == 0) {
+                // Remove the product if its count is 0
+                cartRef.child(String.valueOf(product.getM_id())).removeValue();
+            } else {
+                // Otherwise, update the product in Firebase
+                cartRef.child(String.valueOf(product.getM_id())).setValue(product);
+            }
+        }
+    }
+
+
     @Override
     public int getItemCount() {
-        return filterdDataset.size(); // Return the size of the filtered dataset
+        return filterdDataset.size();
     }
 
     public void filterDataset(String query) {
-        filterdDataset.clear(); // Clear the current filtered dataset
-
+        filterdDataset.clear();
         if (query.isEmpty()) {
-            filterdDataset.addAll(dataSet); // If the query is empty, show all data
+            filterdDataset.addAll(dataSet);
         } else {
             for (ProductModel product : dataSet) {
                 if (product.getM_name().toLowerCase().startsWith(query.toLowerCase())) {
-                    filterdDataset.add(product); // Add matching items
+                    filterdDataset.add(product);
                 }
             }
         }
-
-        notifyDataSetChanged(); // Notify the adapter to refresh the view
+        notifyDataSetChanged();
     }
-
 }

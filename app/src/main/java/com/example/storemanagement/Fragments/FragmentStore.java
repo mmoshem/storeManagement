@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class FragmentStore extends Fragment {
 
-    private ArrayList<ProductModel> dataSet; // Declare dataset as a class-level variable
+    private ArrayList<ProductModel> dataSet; // Store products displayed in the store
 
     public FragmentStore() {
         // Required empty public constructor
@@ -44,32 +44,31 @@ public class FragmentStore extends Fragment {
         View view = inflater.inflate(R.layout.fragment_store, container, false);
         setTextInStore(view);
 
-        // Initialize the dataset
+        // Initialize the dataset using your StoreData arrays
         dataSet = new ArrayList<>();
         for (int i = 0; i < StoreData.ProductArray.length; i++) {
             dataSet.add(new ProductModel(
                     StoreData.drawableArray[i],
                     StoreData.ProductArray[i],
                     StoreData.priceArray[i],
-                    0,  // Initial count
+                    0,  // Initial count is 0
                     StoreData.id_Array[i]
             ));
         }
 
-        // Set up RecyclerView
+        // Set up RecyclerView and its adapter
         RecyclerView recyclerView = view.findViewById(R.id.resView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        // Set up adapter and attach to RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         CustomeAdapter adapter = new CustomeAdapter(dataSet);
         recyclerView.setAdapter(adapter);
 
-        // Handle search functionality
+        // Implement search functionality
         EditText searchEditText = view.findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not needed
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -77,32 +76,53 @@ public class FragmentStore extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                // Not needed
+            }
         });
 
-        // Handle button click to save cart and navigate
+        // Handle "Add and Move to Cart" button click
         Button bt = view.findViewById(R.id.buttonCart);
-        bt.setText("Add and Move to Cart"); // Update button text
+        bt.setText("Add and Move to Cart");
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
                     String userId = user.getUid();
-                    DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("cart");
+                    DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                            .getReference("users")
+                            .child(userId)
+                            .child("cart");
 
-                    ArrayList<ProductModel> cartItems = new ArrayList<>();
-                    for (ProductModel product : dataSet) {
-                        if (product.getM_countItem() > 0) {
-                            String s = String.valueOf(product.getM_id());
-//                            cartRef.child(s).setValue(cartItems);
-                           cartItems.add(product);
-                        }
-                    }
-
-                    cartRef.setValue(cartItems).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
+                    // Read the current cart from Firebase to merge with new items
+                    cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            // Loop through each product in the store that has a count > 0
+                            for (ProductModel product : dataSet) {
+                                if (product.getM_countItem() > 0) {
+                                    String productId = String.valueOf(product.getM_id());
+                                    // If the product is already in the cart, merge the quantities
+                                    if (snapshot.hasChild(productId)) {
+                                        ProductModel existingProduct = snapshot.child(productId).getValue(ProductModel.class);
+                                        if (existingProduct != null) {
+                                            int newCount = existingProduct.getM_countItem() + product.getM_countItem();
+                                            product.setM_countItem(newCount);
+                                        }
+                                    }
+                                    // Update or add the product under its unique productId
+                                    cartRef.child(productId).setValue(product);
+                                }
+                            }
+                            // After merging and updating, navigate to the cart fragment
                             Navigation.findNavController(view).navigate(R.id.action_fragmentStore_to_cartFragment);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Optionally handle errors here
                         }
                     });
                 }
@@ -116,9 +136,12 @@ public class FragmentStore extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("name");
+            DatabaseReference myRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(userId)
+                    .child("name");
 
-            // Read user name from the database and set greeting text
+            // Listen for name changes and update the greeting
             myRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -130,7 +153,7 @@ public class FragmentStore extends Fragment {
 
                 @Override
                 public void onCancelled(DatabaseError error) {
-                    // Failed to read value
+                    // Handle error if needed
                 }
             });
         }

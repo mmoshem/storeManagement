@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- A vertical LinearLayout that shows the search bar, the cart items, a summary, and the clear button -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragments.cartFragment">
 
+    <!-- Optional search bar for cart items -->
     <EditText
         android:id="@+id/searchEditText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search..."
-        android:inputType="" />
+        android:hint="Search..." />
 
+    <!-- RecyclerView for cart items -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Summary TextView showing total price -->
+    <TextView
+        android:id="@+id/tv_total_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Total Price: ₪0.00"
+        android:textSize="20sp"
+        android:gravity="center" />
+
+    <!-- Clear Cart Button -->
+    <Button
+        android:id="@+id/btn_clear_cart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear Cart"
+        android:layout_margin="16dp"
+        android:background="@drawable/designbutton" />
+
+</LinearLayout>

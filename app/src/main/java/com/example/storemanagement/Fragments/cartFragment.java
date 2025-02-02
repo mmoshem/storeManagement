@@ -1,14 +1,17 @@
 package com.example.storemanagement.Fragments;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.storemanagement.CustomeAdapter;
@@ -24,99 +27,117 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link cartFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class cartFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ArrayList<ProductModel> cartData;
+    private RecyclerView recyclerView;
+    private CustomeAdapter adapter;
+    private DatabaseReference cartRef;
+    private TextView tvTotalItems; // Displays the total price
+    private Button btnClearCart;   // The clear cart button
 
     public cartFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment cartFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static cartFragment newInstance(String param1, String param2) {
-        cartFragment fragment = new cartFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment (updated layout with clear button)
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
-        // Initialize RecyclerView
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewCart);
+        // Set up the RecyclerView and its adapter (using cart mode)
+        recyclerView = view.findViewById(R.id.recyclerViewCart);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        // Initialize dataset and adapter
-        ArrayList<ProductModel> cartData = new ArrayList<>();
-        CustomeAdapter adapter = new CustomeAdapter(cartData);
+        cartData = new ArrayList<>();
+        adapter = new CustomeAdapter(cartData, true);
         recyclerView.setAdapter(adapter);
 
-        // Fetch data from Firebase
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String userId = user.getUid();
-            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("cart");
+        // Initialize the summary TextView and clear button
+        tvTotalItems = view.findViewById(R.id.tv_total_items);
+        btnClearCart = view.findViewById(R.id.btn_clear_cart);
 
-            cartRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    cartData.clear(); // Clear old data
+        // Optional: Set up search functionality
+        EditText searchEditText = view.findViewById(R.id.searchEditText2);
+        searchEditText.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filterDataset(s.toString());
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        });
 
-                    // Iterate through the children in the "cart" list
-                    for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-                        ProductModel product = productSnapshot.getValue(ProductModel.class); // Deserialize
-                        if (product != null) {
-                            cartData.add(product); // Add product to dataset
-                        }
-                    }
+        // Set up the clear cart button click listener
+        btnClearCart.setOnClickListener(v -> {
+            // Remove all items from the cart by removing the entire node from Firebase.
+            if (cartRef != null) {
+                cartRef.removeValue()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getContext(), "Cart cleared", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Failed to clear cart", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
 
-                    adapter.notifyDataSetChanged(); // Notify adapter to refresh RecyclerView
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Handle database error
-                    Toast.makeText(getContext(), "Failed to load cart data.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+        // Load cart data from Firebase.
+        fetchCartData();
 
         return view;
     }
 
+    private void fetchCartData() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String userId = user.getUid();
+            cartRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(userId)
+                    .child("cart");
 
+            cartRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    cartData.clear();
+                    Log.d("CART_FRAGMENT", "DataSnapshot: " + snapshot.getValue());
+
+                    for (DataSnapshot productSnapshot : snapshot.getChildren()) {
+                        ProductModel product = productSnapshot.getValue(ProductModel.class);
+                        if (product != null) {
+                            cartData.add(product);
+                            Log.d("CART_FRAGMENT", "Product added: "
+                                    + product.getM_name() + " - Count: " + product.getM_countItem());
+                        }
+                    }
+                    adapter.filterDataset(""); // Update the filtered list
+                    updateCartSummary();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    Log.e("CART_FRAGMENT", "Failed to load cart data: " + error.getMessage());
+                    Toast.makeText(getContext(), "Failed to load cart data.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    // Calculate and display the total price of all items in the cart.
+    private void updateCartSummary() {
+        double totalPrice = 0.0;
+        for (ProductModel p : cartData) {
+            // Remove the currency symbol "₪" and any spaces
+            String cleanedPrice = p.getM_price().replace("₪", "").trim();
+            try {
+                double price = Double.parseDouble(cleanedPrice);
+                int count = p.getM_countItem();
+                totalPrice += price * count;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                Log.e("CART_FRAGMENT", "Failed to parse price: " + cleanedPrice);
+            }
+        }
+        tvTotalItems.setText("Total Price: ₪" + String.format("%.2f", totalPrice));
+    }
 }
